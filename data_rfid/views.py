@@ -11,7 +11,7 @@ from .serializer import ProductSerializer, CategorySerializer, RFIDSerializer
 from django.db.models import Count, Sum
 from django.utils.dateparse import parse_date
 from datetime import datetime, timedelta
-
+from rest_framework import status
 
 # create view for the index page
 # create a view for pruducts page
@@ -31,12 +31,33 @@ class IndexApi(APIView):
         }
         return Response(context)
     
+    
 # creating view api for to products of the rfid
 
 class ProductApi(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
+
+#creating view api for query for rfid
+
+class ProductFilterRfid(APIView):
+    def get(self, request):
+        rfid_uid = request.GET.get('idNFC', None)
+        if not rfid_uid:
+            return Response({
+                "error": "ingrese un idRFID válido"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        products = Product.objects.filter(idNFC=rfid_uid)
+        if products.exists():
+            serializer = ProductSerializer(products , many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "NO hay productos con este uidRFID"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 # creating view api for to product detail of the rfid
 

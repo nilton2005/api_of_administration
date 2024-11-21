@@ -12,6 +12,10 @@ urlpatterns = [
     path('api/', views.IndexApi.as_view(), name='api'),
     # for product
     path('api/productos', views.ProductApi.as_view(), name='api-productos'),
+
+    # for make query in objest produc
+    path('api/productos/', views.ProductFilterRfid.as_view(), name="producto-filtrado"),
+
     path('api/producto/<int:id>', views.ProductDetailApi.as_view(), name='api-producto'),
 
     # for categories
