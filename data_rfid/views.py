@@ -48,7 +48,7 @@ class ProductFilterRfid(APIView):
             return Response({
                 "error": "ingrese un idRFID válido"
             }, status=status.HTTP_400_BAD_REQUEST)
-        products = Product.objects.filter(idNFC=rfid_uid)
+        products = Product.objects.filter(idNFC__id_tag=rfid_uid)
         if products.exists():
             serializer = ProductSerializer(products , many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
