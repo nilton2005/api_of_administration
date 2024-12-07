@@ -127,7 +127,7 @@ def esp32_data(request):
                     product = Product.objects.filter(idNFC=idTagRFID).first()
                     if product:
                         if(product.stock >= 2):
-                            product.stock -= 10
+                            product.stock += 10
                             product.save()
                             print(f"Nuevo stock de {product.name}: {product.stock}")
                         else: 
